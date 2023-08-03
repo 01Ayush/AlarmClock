@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,body{
+            background-color: rgb(56, 2, 56);
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+    text-align: center;
+    color: white;
+    font-size: xxx-large;
+    letter-spacing: 3px;
+    margin-bottom: -15px;
+    font-family: monospace;
+}
+        .container{
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+        #clock{
+            height: 100px;
+            width: 60%;
+            color: yellow;
+            font-size: 60px;
+            letter-spacing: 2px;
+            background-color: aquamarine;
+            background-clip: linear-gradient(red,yellow,blue);
+            background: transparent;
+            display: block;
+            text-align: center;
+        }
+        #field{
+            width: 40%;
+            padding: 12px;
+            background-color: white;
+            font-size: 20px;
+            border: 1px solid rgb(64, 11, 64);
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        .buttons{
+            margin-top: 12px;
+            padding: 12px;
+        }
+        .btn{
+            height: 60px;
+            padding: 12px 50px;
+            font-size: 22px;
+            color: black;
+            font-weight: 500;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: rgba(239, 51, 17, 0.973);
+            transition: all 0.6s ease;
+        }
+        .btn:hover{
+            color:rgba(239, 51, 17, 0.973);
+            background-color: black;
+        }
+
+        @media screen and (max-width:540px){
+            
+        h1{
+            font-family: sans-serif;
+            font-size: 29px;
+            text-decoration: underline;
+            
+        }
+    
+        #clock{
+            width: 100%;
+        }
+         #field{
+            width: 60%;
+        }
+        .buttons{
+            margin-top: 30px;
+        } 
+        }
+    </style>
+</head>
+<body>
+    <h1>JAVASCRIPT ALARM-CLOCK</h1>
+    <div class="container">
+        <div id="clock"> </div>
+        <input type="datetime-local" name="field"  id="field" onchange="getvalue(this.value)"/>
+        <div class="buttons">
+            <button  class="btn" id="start" onclick="setAlarm()">SET</button>
+            <button class="btn" id="stop">Stop</button>
+        </div>
+    </div>
+
+
+
+
+    <script>
+
+          let date = new Date();
+          var alramStart=null;
+          var clearAlarm=null;
+
+
+          let audio= new Audio("gamesound.mp3");
+          audio.loop=true;
+
+
+function getTime(){
+    let date = new Date();
+    let hour= format(date.getHours());
+    let min = format(date.getMinutes());
+    let sec= format(date.getSeconds());
+ 
+    function format(time){
+        if(time<10)
+            return "0"+time;
+        return time;
+        
+    }
+
+
+    let clock= document.getElementById('clock')
+    clock.innerText=`${hour} : ${min} : ${sec}`;
+}
+
+setInterval(getTime,1000);
+
+
+//alarm
+
+function getvalue(time){
+    alarmStart=time;
+    // console.log(alarmStart)
+}
+
+function setAlarm(){
+    
+    console.log("alarm set...")
+    let newTime= new Date();
+    
+    let current= new Date(alarmStart)
+    // console.log("alram time:--"+current)
+    // console.log(newTime)
+    // console.log(current)
+
+    if(current>newTime){
+
+        let timeout= current.getTime()-newTime.getTime();
+console.log("Alarm play after:",timeout)
+clearAlarm = setTimeout(() => {
+            audio.play();
+        }, timeout);
+
+        
+    }
+
+}
+
+let stop = document.getElementById('stop').addEventListener('click',()=>{
+   audio.pause();
+   console.log(clearAlarm)
+   if(clearAlarm){
+
+       clearTimeout(clearAlarm);
+   }
+})
+
+    </script>
+</body>
+</html>
